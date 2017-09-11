@@ -1,0 +1,36 @@
+﻿@model Siedlisko.ViewModels.ReservationIndexViewModel
+@{
+    ViewBag.Title = "Rezerwacje";
+}
+
+@if (!string.IsNullOrWhiteSpace(Model.OperationResultsDescription))
+{
+    <div class="row text-center alert @(@Model.OperationSucces ? "alert-success" : "alert-danger")" >
+        @Model.OperationResultsDescription
+    </div>
+}
+
+<div class="row">
+    <div class="panel-group" id="Accordion">
+        @foreach (var reservation in Model.Reservations.GroupBy(x => x.StartDate.Month).OrderBy(x => x.Key))
+        {
+            <div class="panel panel-success">
+                <div class="panel panel-heading">
+                    <a href="#@reservation.FirstOrDefault().MonthString()" data-toggle="collapse">@reservation.FirstOrDefault().MonthString()</a>
+                </div>
+                <div id="@reservation.FirstOrDefault().MonthString()" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        @foreach (var res in reservation)
+                        {
+                            var partialVM = new Siedlisko.ViewModels.IndexPartielViewModel(res, Model.repo);
+                            @Html.Partial("_IndexPartial", partialVM)
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+        <div class="alert text-center">
+            <a asp-action="Create" asp-controller="Reservation" class="btn btn-success">Stwórz nową rezerwację</a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,113 @@
+﻿.body {
+    background-color: #f8f8f8;
+    max-width: 100%;
+    padding-bottom: 100px;
+}
+
+.logoSiedlisko {
+    background-color: #5cb85c;
+    min-height: 15vh;
+    text-align: center;
+    font-size: larger;
+    padding-top: 2vh;
+}
+
+.mainContent {
+    height: 70vh;
+}
+
+.navbar {
+    margin-bottom: 0px;
+}
+
+/*************************/
+/*Calendar days visuals*/
+/*************************/
+.CalendarDay {
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: large;
+    background-color: darkgray;
+    margin-top: 3px;
+    min-height: 50px;
+}
+
+.Free {
+    background-color: forestgreen;
+    color: white;
+}
+
+.Full {
+    background-color: red;
+    color: black;
+}
+
+.PartiallyTaken {
+    background-color: blue;
+    color: white;
+}
+
+.LastSpots {
+    background-color: orange;
+    color: black;
+}
+
+.CalendarFillerDay {
+    opacity: 0.4;
+}
+
+/*************************/
+/*hax na szerokość przycisków sterujących*/
+/*************************/
+.col-md-2 input {
+    width: 100%;
+}
+/*************************/
+/*ramki w kalendarzu*/
+/*************************/
+#Poniedzialek, #Wtorek, #Sroda, #Czwartek, #Piatek {
+    border: 1px black solid;
+}
+
+#Sobota, #Niedziela {
+    border: 1px red solid;
+}
+
+/*************************/
+/*pozycjonowanie poszczególnych elementów layoutu*/
+/*************************/
+#TopRow {
+    margin-bottom: 10px;
+}
+
+div.Confirmed {
+    background-color: #81ff81;
+    margin: 0px;
+    padding: 0px;
+}
+
+div.UnConfirmed {
+    background-color: #ffc863;
+    margin: 0px;
+    padding: 0px;
+}
+
+div.WaitingForConfirmation {
+    background-color: #67bfff;
+    margin: 0px;
+    padding: 0px;
+}
+
+.ReservationToolbarBtn {
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
+.middleBackBtn {
+    margin-top: 20px;
+}
+
+/**{
+    border: 1px solid black;
+}*/
+

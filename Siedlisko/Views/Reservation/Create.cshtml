@@ -1,0 +1,70 @@
+﻿@model Siedlisko.ViewModels.CreateReservationViewModel
+
+@{
+    ViewBag.Title = "Rezerwacje";
+}
+
+@section Scripts{
+    <script src="~/lib/eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker.js"></script>
+}
+
+@if (Model != null && !string.IsNullOrWhiteSpace(Model.OperationResultsDescription))
+{
+    <div class="row text-center alert @(@Model.OperationSucces ? "alert-success" : "alert-danger")">
+        @Model.OperationResultsDescription
+    </div>
+}
+
+<div class="col-md-4 col-md-offset-4">
+    <form method="post" asp-action="Create" asp-controller="Reservation">
+        <div class="form-group">
+            <label asp-for="StartDate"></label>
+            <div class="input-group date" id="datetimepicker1">
+                <input type="date" class="form-control" asp-for="StartDate" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+            </div>
+            <script type="text/javascript">
+                $(function ()
+                {
+                    $('#datetimepicker1').datetimepicker({ format: "DD/MMMM/YYYY", locale: 'Pl-pl' });
+                });
+            </script>
+            <span asp-validation-for="StartDate"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="EndDate"></label>
+            <div class="input-group date" id="datetimepicker2">
+                <input type='date' class="form-control" asp-for="EndDate" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+                <script type="text/javascript">
+                    $(function ()
+                    {
+                        $('#datetimepicker2').datetimepicker({format: "DD/MMMM/YYYY", locale: 'Pl-pl' });
+                    });
+                </script>
+            </div>
+            <span asp-validation-for="EndDate"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Adults"></label>
+            <input type="number" max="6" min="1" value="1" asp-for="Adults" class="form-control" />
+            <span asp-validation-for="Adults"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Children"></label>
+            <input type="number" max="6" min="0" value="0" asp-for="Children" class="form-control" />
+            <span asp-validation-for="Children"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="RoomId"></label>
+            <input type="number" max="4" min="1" value="1" asp-for="RoomId" class="form-control" />
+            <span asp-validation-for="RoomId"></span>
+        </div>
+        <input type="submit" class="form-control btn btn-success" value="Utwórz" />
+    </form>
+</div>

@@ -1,0 +1,61 @@
+﻿@model Siedlisko.ViewModels.RegisterViewModel
+
+@{
+    ViewBag.Title = "Registration page";
+}
+
+@section Scripts {
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
+
+@if (Model != null && Model.Succesed == false && !string.IsNullOrWhiteSpace(Model.ErrorMsg))
+{
+    <div class="alert alert-danger text-center row">
+        @Model.ErrorMsg
+    </div>
+}
+
+<div class="col-md-offset-4 col-md-4">
+    <form method="post" asp-action="Register" asp-controller="Account">
+        <div class="form-group">
+            <label asp-for="Email"></label>
+            <input type="text" asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Password"></label>
+            <input type="password" asp-for="Password" class="form-control" />
+            <span asp-validation-for="Password"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="PasswordRepeat"></label>
+            <input type="password" asp-for="PasswordRepeat" class="form-control" />
+            <span asp-validation-for="PasswordRepeat"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="UserName"></label>
+            <input type="text" asp-for="UserName" class="form-control" />
+            <span asp-validation-for="UserName"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Imie"></label>
+            <input type="text" asp-for="Imie" class="form-control" />
+            <span asp-validation-for="Imie"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Nazwisko"></label>
+            <input type="text" asp-for="Nazwisko" class="form-control" />
+            <span asp-validation-for="Nazwisko"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="PhoneNumber"></label>
+            <input type="text" asp-for="PhoneNumber" class="form-control" />
+            <span asp-validation-for="PhoneNumber"></span>
+        </div>
+        <input type="submit" class="btn btn-success form-control" value="Zarejestruj" />
+        <div class="alert row">
+            <span class="h6">* - pola wymagane</span>
+        </div>
+    </form>
+</div>

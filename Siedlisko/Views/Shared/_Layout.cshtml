@@ -1,0 +1,73 @@
+﻿@inject Microsoft.ApplicationInsights.AspNetCore.JavaScriptSnippet JavaScriptSnippet
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>@ViewData["Title"] - Siedlisko</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+    <script src="~/lib/moment/locale/pl.js"></script>
+    <script src="~/lib/moment/min/moment-with-locales.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+
+</head>
+<body class="body">
+    <div class="container">
+        @*pierwszy wiersz (menu, navigation bar, logo)*@
+        <div class="row" id="TopRow">
+            <div class="row">
+                <div class="logoSiedlisko">
+                    <span class="h1 text-uppercase text-justify">Siedlisko</span>
+                </div>
+            </div>
+            <div class="row">
+                <nav class="navbar navbar-default">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mainNavBar">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
+                    <div class="navbar-collapse collapse" id="mainNavBar">
+                        <ul class="nav navbar-nav">
+                            <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                            <li><a asp-controller="Home" asp-action="Contact">Contact</a></li>
+                            <li><a asp-controller="Home" asp-action="About">About</a></li>
+                            <li><a asp-controller="Reservation" asp-action="Index">Rezerwacje</a></li>
+                        </ul>
+                        @if (!this.User.Identity.IsAuthenticated)
+                        {
+                            <ul class="nav navbar-right navbar-nav">
+                                <li><a asp-action="Login" asp-controller="Account">Zaloguj</a></li>
+                                <li><a asp-action="Register" asp-controller="Account">Zarejestruj</a></li>
+                            </ul>
+                        }
+                        else
+                        {
+                            <ul class="nav navbar-right navbar-nav">
+                                <li><a asp-action="LogOut" asp-controller="Account">Wyloguj</a></li>
+                                <li><a asp-action="Details" asp-controller="Account" asp-route-id=@User.Identity.Name>@User.Identity.Name</a></li>
+                            </ul>
+                        }
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+        @*drugi wiersz(bajery)*@
+        <div class="row">
+            @RenderBody()
+        </div>
+
+        @*trzeci wiersz - stopka*@
+        <div class="row">
+            <footer class="navbar-fixed-bottom panel-footer modal-footer">&copy; Jan Musioł 2017</footer>
+        </div>
+    </div>
+    @RenderSection("Scripts", false)
+</body>
+</html>

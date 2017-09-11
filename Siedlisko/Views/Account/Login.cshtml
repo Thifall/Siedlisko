@@ -1,0 +1,32 @@
+﻿@model Siedlisko.ViewModels.LoginViewModel
+@{
+    ViewBag.Title = "Login";
+}
+
+@section Scripts{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
+
+@if (Model != null && Model.Create)
+{
+    <div class="row alert alert-success text-center">
+        <span>Konto zostało założone</span>
+    </div>
+}
+<div class="col-md-offset-4 col-md-4">
+    <form class="form-horizontal" method="post" novalidate>
+        <div asp-validation-summary="ModelOnly" class="form-control-static"></div>
+        <div class="form-group">
+            <label asp-for="Email"></label>
+            <input type="text" asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Password"></label>
+            <input type="password" asp-for="Password" class="form-control" />
+            <span asp-validation-for="Password"></span>
+        </div>
+        <input type="submit" class="form-control" value="Zaloguj" />
+    </form>
+</div>
