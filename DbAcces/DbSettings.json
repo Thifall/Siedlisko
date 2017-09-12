@@ -1,0 +1,6 @@
+{
+  "ConnectionStrings": {
+    "SqlServerConnectionString": "Server=(localdb)\\MSSQLLocalDB;Database=SiedliskoDatabase;Trusted_Connection=true;MultipleActiveResultSets=true",
+    "SqlServerConnectionString2": "Server=SQL6003.SmarterASP.NET;Database=DB_A2A3C4_siedlisko;User=DB_A2A3C4_siedlisko_admin;Password=siedlisko123!@#;"
+  }
+}

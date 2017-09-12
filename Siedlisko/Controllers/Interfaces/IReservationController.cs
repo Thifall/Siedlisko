@@ -1,4 +1,4 @@
-﻿using Siedlisko.Models.Interfaces;
+﻿using DbAcces.Entities.Interfaces;
 using Siedlisko.ViewModels;
 
 namespace Siedlisko.Controllers.Interfaces

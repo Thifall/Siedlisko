@@ -1,12 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Siedlisko.Models.Interfaces;
+﻿using DbAcces.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using DbAcces.Entities;
+using DbAcces.DbContext;
+using Microsoft.EntityFrameworkCore;
 
-namespace Siedlisko.Models
+namespace DbAcces.Repositories
 {
     public class Repository : IRepository
     {

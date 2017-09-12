@@ -1,16 +1,15 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using DbAcces.Entities;
+using DbAcces.Entities.Interfaces;
+using DbAcces.Enums;
+using DbAcces.Repositories.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Siedlisko.Controllers.Interfaces;
-using Siedlisko.Models;
-using Siedlisko.Models.Interfaces;
 using Siedlisko.ViewModels;
 using Siedlisko.ViewModels.Interfaces;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Siedlisko.Controllers
@@ -77,7 +76,7 @@ namespace Siedlisko.Controllers
             var reservation = _repository.GetReservationById(Id);
             if (reservation != null)
             {
-                if (await _repository.UpdateReservation(x => x.Status = Models.Enums.ReservationStatus.Confirmed, Id))
+                if (await _repository.UpdateReservation(x => x.Status = ReservationStatus.Confirmed, Id))
                 {
                     _operationResultDescription = "Zmiany zapisane!";
                     _operationSucces = true;
@@ -178,7 +177,7 @@ namespace Siedlisko.Controllers
                 ReservedOn = DateTime.Now,
                 ReserverLastName = user.Nazwisko,
                 ReserverUserName = user.UserName,
-                Status = Models.Enums.ReservationStatus.WaitingForConfirmation,
+                Status = ReservationStatus.WaitingForConfirmation,
                 Adults = createVM.Adults,
                 Children = createVM.Children,
             };

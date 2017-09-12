@@ -1,5 +1,5 @@
-﻿using Siedlisko.Models;
-using Siedlisko.Models.Interfaces;
+﻿using DbAcces.Entities;
+using DbAcces.Repositories.Interfaces;
 using Siedlisko.ViewModels.Interfaces;
 using System.Collections.Generic;
 

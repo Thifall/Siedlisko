@@ -1,9 +1,5 @@
-﻿using Siedlisko.Models.Enums;
+﻿using DbAcces.Enums;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Siedlisko.Models
 {

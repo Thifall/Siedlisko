@@ -3,13 +3,16 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Siedlisko.Models;
 using Siedlisko.Models.Helper;
-using Siedlisko.Models.Interfaces;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using AutoMapper;
 using Siedlisko.ViewModels;
 using System;
+using DbAcces.DbContext;
+using DbAcces.Repositories.Interfaces;
+using DbAcces.Entities;
+using DbAcces.Repositories;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace Siedlisko
 {
@@ -38,11 +41,11 @@ namespace Siedlisko
                 config.ForwardClientCertificate = true;
                 config.ForwardWindowsAuthentication = false;
             });
-
+            
             services.AddSingleton(_config);
             // Add framework services.
+            services.AddTransient<IDbContextFactory<SiedliskoContext>, DbContextFactory>();
             services.AddTransient<PriceCounter>();
-            services.AddDbContext<SiedliskoContext>();
             services.AddTransient<SiedliskoDataSeeder>();
             services.AddScoped<IRepository, Repository>();
             services.AddIdentity<SiedliskoUser, IdentityRole>(config =>

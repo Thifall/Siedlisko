@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using DbAcces.DbContext;
+using DbAcces.Entities;
+using DbAcces.Enums;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Siedlisko.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,9 +64,9 @@ namespace Siedlisko.Models.Helper
                                 ReserverLastName = "Musioł",
                                 StartDate = DateTime.Now,
                                 EndDate = DateTime.Now.AddDays(4),
-                                Adults=5,
-                                Children=2,
-                                Status=Enums.ReservationStatus.WaitingForConfirmation,
+                                Adults = 5,
+                                Children = 2,
+                                Status = ReservationStatus.WaitingForConfirmation,
                             }
                         }
                     };
@@ -73,7 +75,7 @@ namespace Siedlisko.Models.Helper
                 }
                 await _context.SaveChangesAsync();
             }
-        } 
+        }
         #endregion
     }
 }

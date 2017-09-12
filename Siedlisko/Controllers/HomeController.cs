@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Siedlisko.ViewModels;
-using Siedlisko.Models;
 using Microsoft.Extensions.Configuration;
-using Siedlisko.Models.Interfaces;
+using DbAcces.Repositories.Interfaces;
 
 namespace Siedlisko.Controllers
 {

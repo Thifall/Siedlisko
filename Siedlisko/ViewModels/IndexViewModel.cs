@@ -1,4 +1,6 @@
-﻿using Siedlisko.ExtensionMethods;
+﻿using DbAcces.Entities;
+using DbAcces.Enums;
+using Siedlisko.ExtensionMethods;
 using Siedlisko.Models;
 using Siedlisko.Models.Helper;
 using System;
@@ -40,15 +42,15 @@ namespace Siedlisko.ViewModels
                     day.ReservationCounter++;
                     if(day.ReservationCounter > 3)
                     {
-                        day.ReservationState = Models.Enums.ReservationStatus.Full;
+                        day.ReservationState = ReservationStatus.Full;
                     }
                     else if (day.ReservationCounter > 2)
                     {
-                        day.ReservationState = Models.Enums.ReservationStatus.LastSpots;
+                        day.ReservationState = ReservationStatus.LastSpots;
                     }
                     else if (day.ReservationCounter > 0)
                     {
-                        day.ReservationState = Models.Enums.ReservationStatus.PartiallyTaken;
+                        day.ReservationState = ReservationStatus.PartiallyTaken;
                     }
                 }
             }

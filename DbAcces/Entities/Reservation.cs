@@ -41,7 +41,7 @@ namespace DbAcces.Entities
         public string MonthString()
         {
             return NamingHelper.GetMonthString(StartDate.Month);
-        } 
+        }
         #endregion
     }
 }
