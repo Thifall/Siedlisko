@@ -18,11 +18,6 @@ namespace DbAcces.DbContext
         #endregion
 
         #region ctor
-        public SiedliskoContext()
-        {
-
-        }
-
         public SiedliskoContext(IConfigurationRoot config, DbContextOptions options) : base(options)
         {
             _config = config;
