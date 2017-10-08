@@ -14,7 +14,7 @@ namespace Siedlisko.Models.Interfaces
         IEnumerable<Reservation> GetRoomReservations(Room room);
         Reservation GetReservationById(int id);
         Task<bool> RemoveReservation(Reservation reservation);
-        Task<bool> AddReservation(Reservation reservation, Room room);
+        Task<Reservation> AddReservation(Reservation reservation, Room room);
         Task<bool> UpdateReservation(Action<Reservation> action, int Id);
         #endregion
 

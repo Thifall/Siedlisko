@@ -11,6 +11,9 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using AutoMapper;
 using Siedlisko.ViewModels;
 using System;
+using Newtonsoft.Json.Serialization;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Threading.Tasks;
 
 namespace Siedlisko
 {
@@ -26,7 +29,7 @@ namespace Siedlisko
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
                 .AddJsonFile("config.json", optional: false, reloadOnChange: true)
                 .AddEnvironmentVariables();
-          
+
             _config = builder.Build();
         }
 
@@ -46,6 +49,7 @@ namespace Siedlisko
             services.AddDbContext<SiedliskoContext>();
             services.AddTransient<SiedliskoDataSeeder>();
             services.AddScoped<IRepository, Repository>();
+            services.AddScoped<EmailRepository>();
             services.AddIdentity<SiedliskoUser, IdentityRole>(config =>
             {
                 config.Password.RequireUppercase = false;
@@ -53,8 +57,23 @@ namespace Siedlisko
                 config.Password.RequiredLength = 8;
                 config.Password.RequireNonAlphanumeric = false;
                 config.Cookies.ApplicationCookie.LoginPath = "/Account/Login";
+                config.Cookies.ApplicationCookie.Events = new CookieAuthenticationEvents()
+                {
+                    OnRedirectToLogin = async ctx =>
+                    {
+                        if (ctx.Request.Path.StartsWithSegments("/Api") && ctx.Response.StatusCode == 200)
+                        {
+                            ctx.Response.StatusCode = 401;
+                        }
+                        else if (ctx.Response.StatusCode != 401)
+                        {
+                            ctx.Response.Redirect(ctx.RedirectUri);
+                        }
+                        await Task.Yield();
+                    }
+                };
             }).AddEntityFrameworkStores<SiedliskoContext>();
-            services.AddMvc();
+            services.AddMvc().AddJsonOptions(config => config.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -64,7 +83,7 @@ namespace Siedlisko
             {
                 config.CreateMap<SiedliskoUser, AccountDetailsViewModel>();
             });
-            
+
             loggerFactory.AddFile(string.Format("Logs/{0}_Siedlisko.log", DateTime.Now.ToString("dd-MM-yyyy")));
 
             if (env.IsDevelopment())

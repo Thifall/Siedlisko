@@ -27,7 +27,7 @@
                 <label asp-for=Reservation.Status>Status zgłoszenia:</label>
                 <input asp-for=Reservation.Status type="date" class="form-control" readonly />
             </div>
-            @if (Model.Reservation.Status != Siedlisko.Models.Enums.ReservationStatus.Confirmed)
+            @if (Model.Reservation.Status != SiedliskoCommon.Models.Enums.ReservationStatus.Confirmed)
             {
                 <div class="form-group">
                     <a class="btn btn-success form-control" asp-action="Confirm" asp-controller="Reservation" asp-route-id="@Model.Reservation.Id">Potwierdź</a>

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Siedlisko.Models.Interfaces;
+using SiedliskoCommon.Models;
 
 namespace Siedlisko.Models
 {
@@ -15,6 +16,7 @@ namespace Siedlisko.Models
         public DbSet<Room> Pokoje { get; set; }
         public DbSet<Reservation> Rezerwacje { get; set; }
         public DbSet<Price> Prices { get; set; }
+        public DbSet<EmailMessage> EmailMessages { get; set; }
         #endregion
 
         #region ctor

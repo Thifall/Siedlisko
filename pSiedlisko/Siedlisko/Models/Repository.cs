@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Siedlisko.Models.Interfaces;
+using SiedliskoCommon.Models;
+using SiedliskoCommon.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Siedlisko.Models
@@ -22,10 +23,12 @@ namespace Siedlisko.Models
         #endregion
 
         #region Reservations
-        public async Task<bool> AddReservation(Reservation reservation, Room room)
+        public async Task<Reservation> AddReservation(Reservation reservation, Room room)
         {
-            GetRoom(room.Id).Reservations.Add(reservation);
-            return await _context.SaveChangesAsync() > 0;
+            var entry = _context.Rezerwacje.Add(reservation);
+            GetRoom(room.Id).Reservations.Add(entry.Entity);
+            await _context.SaveChangesAsync();
+            return entry.Entity;
         }
 
         public IEnumerable<Reservation> GetAllReservations()
@@ -96,6 +99,13 @@ namespace Siedlisko.Models
                 .ToList();
         }
 
+        #endregion
+
+        #region EmailMessages
+        public IEnumerable<EmailMessage> GetAllEmailToSend()
+        {
+            return _context.EmailMessages.Where(x => x.status == EmailStatus.ToSend);
+        }
         #endregion
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Siedlisko.Models.Enums
+namespace SiedliskoCommon.Models.Enums
 {
     public enum ReservationStatus
     {
@@ -26,5 +26,12 @@ namespace Siedlisko.Models.Enums
         Adult,
         Child,
         Room,
+    }
+
+    public enum EmailStatus
+    {
+        ToSend,
+        Sending,
+        Sent,
     }
 }

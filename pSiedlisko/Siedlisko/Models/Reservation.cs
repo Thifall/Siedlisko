@@ -1,17 +1,13 @@
-﻿using Siedlisko.Models.Enums;
-using Siedlisko.Models.Helper;
+﻿using Siedlisko.Models.Helper;
 using Siedlisko.Models.Interfaces;
+using SiedliskoCommon.Models.Enums;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Siedlisko.Models
 {
     public class Reservation : IReservation
     {
-        #region MyRegion
+        #region Fields and Properties
         public int Id { get; set; }
         public string ReserverLastName { get; set; }
         public string ReserverUserName { get; set; }

@@ -1,16 +1,16 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Siedlisko.Controllers.Interfaces;
 using Siedlisko.Models;
 using Siedlisko.Models.Interfaces;
 using Siedlisko.ViewModels;
 using Siedlisko.ViewModels.Interfaces;
+using SiedliskoCommon.Models;
+using SiedliskoCommon.Models.Enums;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Siedlisko.Controllers
@@ -18,18 +18,22 @@ namespace Siedlisko.Controllers
     public class ReservationController : Controller, IReservationController
     {
         #region Fields and Properties
+        private IConfigurationRoot _config;
         private UserManager<SiedliskoUser> _userManager;
         private IRepository _repository;
+        private EmailRepository _emailRepository;
         private static bool _operationSucces;
         private static string _operationResultDescription;
         #endregion
 
         #region ctor
 
-        public ReservationController( UserManager<SiedliskoUser> userManager, IRepository repository)
+        public ReservationController( UserManager<SiedliskoUser> userManager, IRepository repository, EmailRepository emailRepository, IConfigurationRoot configuration)
         {
+            _config = configuration;
             _userManager = userManager;
             _repository = repository;
+            _emailRepository = emailRepository;
         }
         #endregion
 
@@ -72,12 +76,12 @@ namespace Siedlisko.Controllers
 
         //potwierdzenie i powrót do widoku edycji
         [Authorize]
-        public async Task<IActionResult> Confirm(int Id)//TODO zrobić view modela i w widoku dodać diva na powiadomienia... lol
+        public async Task<IActionResult> Confirm(int Id)
         {
             var reservation = _repository.GetReservationById(Id);
             if (reservation != null)
             {
-                if (await _repository.UpdateReservation(x => x.Status = Models.Enums.ReservationStatus.Confirmed, Id))
+                if (await _repository.UpdateReservation(x => x.Status = ReservationStatus.Confirmed, Id))
                 {
                     _operationResultDescription = "Zmiany zapisane!";
                     _operationSucces = true;
@@ -178,7 +182,7 @@ namespace Siedlisko.Controllers
                 ReservedOn = DateTime.Now,
                 ReserverLastName = user.Nazwisko,
                 ReserverUserName = user.UserName,
-                Status = Models.Enums.ReservationStatus.WaitingForConfirmation,
+                Status = ReservationStatus.WaitingForConfirmation,
                 Adults = createVM.Adults,
                 Children = createVM.Children,
             };
@@ -187,15 +191,46 @@ namespace Siedlisko.Controllers
             var addResult = await _repository.AddReservation(res, room);
 
             //3. save changes and display succes monit
-            if (addResult)
+            if (addResult != null)
             {
                 _operationSucces = true;
                 _operationResultDescription = "Rezerwacja przebiegła pomyślnie";
+
+                PrepareEmail(user, res);
             }
             else
             {
                 _operationSucces = false;
                 _operationResultDescription = "Rezerwacja nie powiodła się";
+            }
+        }
+
+        private async Task PrepareEmail(SiedliskoUser user, Reservation reservation)
+        {
+            try
+            {
+                EmailMessage email = new EmailMessage
+                {
+                    CreationTime = DateTime.Now,
+                    ReservationId = reservation.Id,
+                    ToAdress = user.Email,
+                    status = EmailStatus.ToSend,
+                    ToLogin = user.UserName
+                };
+                string format = System.IO.File.ReadAllText(_config["EmailNotificationsConfiguration:TemplateForUserPath"]);
+                email.MessageBody = string.Format(format,
+                    email.ToLogin,
+                    reservation.StartDate.Date,
+                    reservation.EndDate.Date,
+                    (reservation.Adults + reservation.Children),
+                    reservation.ReserverLastName,
+                    reservation.TotalCost,
+                    reservation.Id);
+                await _emailRepository.AddEmail(email);
+            }
+            catch (Exception ex)
+            {
+                //log error
             }
         }
 

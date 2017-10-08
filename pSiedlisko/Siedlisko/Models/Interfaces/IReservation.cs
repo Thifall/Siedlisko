@@ -1,5 +1,5 @@
 ﻿using System;
-using Siedlisko.Models.Enums;
+using SiedliskoCommon.Models.Enums;
 
 namespace Siedlisko.Models.Interfaces
 {

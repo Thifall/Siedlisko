@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Siedlisko.Models.Enums;
+using SiedliskoCommon.Models.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Siedlisko.Models.Helper
@@ -64,7 +63,7 @@ namespace Siedlisko.Models.Helper
                                 EndDate = DateTime.Now.AddDays(4),
                                 Adults=5,
                                 Children=2,
-                                Status=Enums.ReservationStatus.WaitingForConfirmation,
+                                Status = ReservationStatus.WaitingForConfirmation,
                             }
                         }
                     };

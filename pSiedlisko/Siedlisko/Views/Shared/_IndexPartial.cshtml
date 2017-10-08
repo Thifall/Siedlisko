@@ -1,7 +1,7 @@
 ﻿@model Siedlisko.ViewModels.IndexPartielViewModel
 
 
-<div class="col-xs-12 row @if (Model.Reservation.Status == Siedlisko.Models.Enums.ReservationStatus.WaitingForConfirmation
+<div class="col-xs-12 row @if (Model.Reservation.Status == SiedliskoCommon.Models.Enums.ReservationStatus.WaitingForConfirmation
 && Model.Reservation.ReservedOn.AddDays(14) < DateTime.Now)
 {
         @("UnConfirmed")

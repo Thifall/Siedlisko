@@ -52,5 +52,8 @@
     <None Include="Controllers\Interfaces\IReservationController.cs" />
     <None Include="ViewModels\RegisterViewModel.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SiedliskoCommon\SiedliskoCommon.csproj" />
+  </ItemGroup>
   <ProjectExtensions><VisualStudio><UserProperties config_1json__JSONSchema="" /></VisualStudio></ProjectExtensions>
 </Project>

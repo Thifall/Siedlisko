@@ -2,9 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Siedlisko.Models;
-using Siedlisko.Models.Enums;
 
 namespace Siedlisko.Migrations
 {
@@ -122,6 +120,30 @@ namespace Siedlisko.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("Siedlisko.Models.EmailMessage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<DateTime>("CreationTime");
+
+                    b.Property<string>("MessageBody");
+
+                    b.Property<int>("ReservationId");
+
+                    b.Property<DateTime>("SendTime");
+
+                    b.Property<string>("ToAdress");
+
+                    b.Property<string>("ToLogin");
+
+                    b.Property<int>("status");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EmailMessages");
                 });
 
             modelBuilder.Entity("Siedlisko.Models.Price", b =>

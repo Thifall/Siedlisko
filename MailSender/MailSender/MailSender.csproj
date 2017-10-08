@@ -5,4 +5,23 @@
     <TargetFramework>netcoreapp1.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MailKit" Version="1.18.1.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="1.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.1.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="1.1.1" />
+    <PackageReference Include="System.Reactive" Version="3.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\pSiedlisko\SiedliskoCommon\SiedliskoCommon.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="config.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

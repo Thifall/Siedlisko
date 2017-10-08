@@ -8,8 +8,8 @@ using Siedlisko.Models;
 namespace Siedlisko.Migrations
 {
     [DbContext(typeof(SiedliskoContext))]
-    [Migration("20170826163239_UpdatingIdentity")]
-    partial class UpdatingIdentity
+    [Migration("20171001194744_EmailMessageEntity")]
+    partial class EmailMessageEntity
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -124,16 +124,28 @@ namespace Siedlisko.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Siedlisko.Models.Pokoj", b =>
+            modelBuilder.Entity("Siedlisko.Models.EmailMessage", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Name");
+                    b.Property<DateTime>("CreationTime");
+
+                    b.Property<string>("MessageBody");
+
+                    b.Property<int>("ReservationId");
+
+                    b.Property<DateTime>("SendTime");
+
+                    b.Property<string>("ToAdress");
+
+                    b.Property<string>("ToLogin");
+
+                    b.Property<int>("status");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Pokoje");
+                    b.ToTable("EmailMessages");
                 });
 
             modelBuilder.Entity("Siedlisko.Models.Price", b =>
@@ -150,7 +162,7 @@ namespace Siedlisko.Migrations
                     b.ToTable("Prices");
                 });
 
-            modelBuilder.Entity("Siedlisko.Models.Rezerwacja", b =>
+            modelBuilder.Entity("Siedlisko.Models.Reservation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -161,11 +173,13 @@ namespace Siedlisko.Migrations
 
                     b.Property<DateTime>("EndDate");
 
-                    b.Property<int?>("PokojId");
-
                     b.Property<DateTime>("ReservedOn");
 
                     b.Property<string>("ReserverLastName");
+
+                    b.Property<string>("ReserverUserName");
+
+                    b.Property<int?>("RoomId");
 
                     b.Property<DateTime>("StartDate");
 
@@ -175,9 +189,21 @@ namespace Siedlisko.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PokojId");
+                    b.HasIndex("RoomId");
 
                     b.ToTable("Rezerwacje");
+                });
+
+            modelBuilder.Entity("Siedlisko.Models.Room", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Pokoje");
                 });
 
             modelBuilder.Entity("Siedlisko.Models.SiedliskoUser", b =>
@@ -271,11 +297,11 @@ namespace Siedlisko.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Siedlisko.Models.Rezerwacja", b =>
+            modelBuilder.Entity("Siedlisko.Models.Reservation", b =>
                 {
-                    b.HasOne("Siedlisko.Models.Pokoj")
+                    b.HasOne("Siedlisko.Models.Room")
                         .WithMany("Reservations")
-                        .HasForeignKey("PokojId");
+                        .HasForeignKey("RoomId");
                 });
         }
     }
