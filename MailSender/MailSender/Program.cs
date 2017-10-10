@@ -18,24 +18,13 @@ namespace MailSender
 
             var serviceProvide = new ServiceCollection()
                 .AddSingleton<MailingService>()
-                .AddSingleton(_config);
+                .AddSingleton(_config)
+                .BuildServiceProvider();
 
-            var looper = Observable.Interval(TimeSpan.FromSeconds(5));
-            using (looper.Subscribe(onNext: (x) => 
-            {
-                Console.WriteLine(x);
-            },
-            onError: (ex) =>
-            {
-                Console.WriteLine(ex);
-            }, onCompleted: () =>
-            {
-
-            }
-            ))
-            {
-                Console.ReadLine();
-            }
+            var service = (MailingService)serviceProvide.GetService(typeof(MailingService));
+            service.Run();
+            Console.ReadLine();
+            
         }
     }
 }

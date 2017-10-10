@@ -26,7 +26,10 @@ namespace Siedlisko.Models
         #region Public API
         public IEnumerable<EmailMessage> GetEmailMessages()
         {
-            return _context.EmailMessages.ToList();
+            lock (_syncObject)
+            {
+                return _context.EmailMessages.ToList();
+            }
         }
 
         public IEnumerable<EmailMessage> GetEmailMessages(Func<EmailMessage, bool> predicate)
@@ -39,14 +42,20 @@ namespace Siedlisko.Models
 
         public EmailMessage GetemailById(int id)
         {
-            return _context.EmailMessages.FirstOrDefault(x => x.Id == id);
+            lock (_syncObject)
+            {
+                return _context.EmailMessages.FirstOrDefault(x => x.Id == id); 
+            }
         }
 
-        public async Task<EmailMessage> AddEmail(EmailMessage email)
+        public EmailMessage AddEmail(EmailMessage email)
         {
-            var entity = _context.EmailMessages.Add(email);
-            await _context.SaveChangesAsync();
-            return entity.Entity;
+            lock (_syncObject)
+            {
+                var entity = _context.EmailMessages.Add(email);
+                _context.SaveChanges();
+                return entity.Entity;
+            }
         }
 
         public async Task<EmailMessage> UpdateEmail(EmailMessage email)

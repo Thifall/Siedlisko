@@ -50,22 +50,35 @@ namespace Siedlisko.Controllers
 
         }
 
-        public async Task<IActionResult> UpdateEmail(EmailMessage email)
+        [HttpPut("Api/UpdateEmail")]
+        public async Task<IActionResult> UpdateEmail([FromBody]EmailMessage email)
         {
-            string credentials = Request.Headers["Authorization"];
-            if (string.IsNullOrWhiteSpace(credentials))
-            {
-                return Unauthorized();
-            }
+            //string credentials = Request.Headers["Authorization"];
+            //if (string.IsNullOrWhiteSpace(credentials))
+            //{
+            //    return Unauthorized();
+            //}
 
-            if (!(await CheckCredentials(credentials)))
+            //if (!(await CheckCredentials(credentials)))
+            //{
+            //    return Unauthorized();
+            //}
+            if (!ModelState.IsValid)
             {
-                return Unauthorized();
+                return BadRequest();
             }
-
-            if (_repository.UpdateEmail(email) != null)
+            try
             {
-                return Ok(_repository.GetemailById(email.Id));
+                var message = await _repository.UpdateEmail(email);
+
+                if (message != null)
+                {
+                    return Ok(message);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Error occured during action. Operation was unsuccessfull");
             }
             return BadRequest();
         }
@@ -93,7 +106,7 @@ namespace Siedlisko.Controllers
             }
 
             return (await _signInManager.PasswordSignInAsync(user, authDetails[1], false, false)).Succeeded;
-        } 
+        }
         #endregion
     }
 }

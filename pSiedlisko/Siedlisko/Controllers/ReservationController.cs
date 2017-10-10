@@ -205,7 +205,7 @@ namespace Siedlisko.Controllers
             }
         }
 
-        private async Task PrepareEmail(SiedliskoUser user, Reservation reservation)
+        private void PrepareEmail(SiedliskoUser user, Reservation reservation)
         {
             try
             {
@@ -226,7 +226,7 @@ namespace Siedlisko.Controllers
                     reservation.ReserverLastName,
                     reservation.TotalCost,
                     reservation.Id);
-                await _emailRepository.AddEmail(email);
+                _emailRepository.AddEmail(email);
             }
             catch (Exception ex)
             {
