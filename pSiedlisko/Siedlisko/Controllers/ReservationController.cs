@@ -12,6 +12,7 @@ using SiedliskoCommon.Models.Enums;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace Siedlisko.Controllers
 {
@@ -197,11 +198,41 @@ namespace Siedlisko.Controllers
                 _operationResultDescription = "Rezerwacja przebiegła pomyślnie";
 
                 PrepareEmail(user, res);
+                PrepareEmailForAdministration(user, res);
             }
             else
             {
                 _operationSucces = false;
                 _operationResultDescription = "Rezerwacja nie powiodła się";
+            }
+        }
+
+        private void PrepareEmailForAdministration(SiedliskoUser user, Reservation reservation)
+        {
+            try
+            {
+                EmailMessage email = new EmailMessage
+                {
+                    CreationTime = DateTime.Now,
+                    ReservationId = reservation.Id,
+                    ToAdress = _config["EmailNotificationsConfiguration:TargetNotificationEmail"],
+                    status = EmailStatus.ToSend,
+                    ToLogin = user.UserName
+                };
+                string format = System.IO.File.ReadAllText(_config["EmailNotificationsConfiguration:TemplateForAdminPath"]);
+                email.MessageBody = string.Format(format,
+                    reservation.StartDate.ToString("dd-MMMM-yyyy"),
+                    reservation.EndDate.ToString("dd-MMMM-yyyy"),
+                    reservation.NumberOfAccomodations,
+                    reservation.ReserverLastName,
+                    user.Email,
+                    user.PhoneNumber,
+                    reservation.Id);
+                _emailRepository.AddEmail(email);
+            }
+            catch (Exception ex)
+            {
+                //log error
             }
         }
 
@@ -220,8 +251,8 @@ namespace Siedlisko.Controllers
                 string format = System.IO.File.ReadAllText(_config["EmailNotificationsConfiguration:TemplateForUserPath"]);
                 email.MessageBody = string.Format(format,
                     email.ToLogin,
-                    reservation.StartDate.Date,
-                    reservation.EndDate.Date,
+                    reservation.StartDate.ToString("dd-MMMM-yyyy"),
+                    reservation.EndDate.ToString("dd-MMMM-yyyy"),
                     (reservation.Adults + reservation.Children),
                     reservation.ReserverLastName,
                     reservation.TotalCost,

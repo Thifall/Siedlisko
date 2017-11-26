@@ -1,0 +1,8 @@
+﻿<h3>W systemie pojawiła się nowa rezerwacja!</h3>
+<p>Szczegóły:</p>
+<p>data rozpoczęcia pobytu: {0}<br />
+data zakończenia pobytu: {1}<br />
+ilość nocleg&oacute;w: {2}<br />
+nazwisko: {3}<br />
+kontakt: emal - {4} numer tel. {5}<br /><br />
+numer rezerwacji: {6}</p>

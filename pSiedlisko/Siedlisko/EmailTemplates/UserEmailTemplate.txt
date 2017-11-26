@@ -1,4 +1,4 @@
-﻿<p>Witaj {0}!</p>
+﻿<p><h2>Witaj {0}!</h2></p>
 <p>Twoja rezerwacja została przyjęta. Wkrótce skontaktujemy się z tobą telefonicznie lub mailowo w celu potwierdzenia Twojego przyjazdu.<br />
 <br />Szczegóły twojej rezerwacji:<br />
 Termin: {1} - {2},

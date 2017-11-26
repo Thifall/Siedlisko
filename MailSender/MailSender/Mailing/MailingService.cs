@@ -82,20 +82,21 @@ namespace MailSender.Mailing
 
         public void Run()
         {
-            var looper = Observable.Interval(TimeSpan.FromSeconds(15));
+            var looper = Observable.Interval(TimeSpan.FromSeconds(double.Parse(_configuration["ServiceConfiguration:TimerInterval"])));
             using (looper.Subscribe(onNext: async (x) =>
             {
                 await GatherEmails();
             },
             onError: (ex) =>
             {
-                Console.WriteLine(ex);
+                System.Diagnostics.Debug.WriteLine(string.Format($"An error occured: {ex}"));
             }, onCompleted: () =>
             {
-                Console.WriteLine("Subscription completed");
+                System.Diagnostics.Debug.WriteLine("Subscription completed");
             }
             ))
             {
+                Console.WriteLine("press any key to close application...");
                 Console.ReadLine();
             }
         }
