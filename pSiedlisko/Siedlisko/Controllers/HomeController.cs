@@ -13,14 +13,12 @@ namespace Siedlisko.Controllers
     public class HomeController : Controller
     {
         #region Fields and Properties
-        private IConfigurationRoot _config;
         private IRepository _repository;
         #endregion
 
         #region .ctor
-        public HomeController(IConfigurationRoot config, IRepository repo)
+        public HomeController(IRepository repo)
         {
-            _config = config;
             _repository = repo;
         }
         #endregion

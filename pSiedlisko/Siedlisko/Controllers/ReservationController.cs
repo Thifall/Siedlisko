@@ -136,12 +136,12 @@ namespace Siedlisko.Controllers
                         }
                         else
                         {
-                            _operationResultDescription = "Nie udało się anulować rezerwacji";
+                            _operationResultDescription = "Operacja nie powiodła się!";
                             _operationSucces = false;
                         }
                     }
                 }
-                else
+                else if (User.IsInRole("Dev") || User.IsInRole("Admin"))
                 {
                     if (await _repository.RemoveReservation(reservation))
                     {
@@ -150,9 +150,14 @@ namespace Siedlisko.Controllers
                     }
                     else
                     {
-                        _operationResultDescription = "Nie udało się anulować rezerwacji";
+                        _operationResultDescription = "Operacja nie powiodła się!";
                         _operationSucces = false;
                     }
+                }
+                else
+                {
+                    _operationResultDescription = "Operacja nie powiodła się!";
+                    _operationSucces = false;
                 }
             }
             return RedirectToAction("Index", "Reservation");
