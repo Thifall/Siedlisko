@@ -9,9 +9,10 @@ using SiedliskoCommon.Models.Enums;
 namespace Siedlisko.Migrations
 {
     [DbContext(typeof(SiedliskoContext))]
-    partial class SiedliskoContextModelSnapshot : ModelSnapshot
+    [Migration("20180215175111_LastRefactors")]
+    partial class LastRefactors
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.1.2")
