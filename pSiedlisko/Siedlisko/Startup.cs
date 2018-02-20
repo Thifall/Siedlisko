@@ -14,6 +14,7 @@ using System;
 using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Threading.Tasks;
+using Siedlisko.Reservations;
 
 namespace Siedlisko
 {
@@ -44,12 +45,13 @@ namespace Siedlisko
             });
 
             services.AddSingleton(_config);
-            // Add framework services.
             services.AddTransient<PriceCounter>();
             services.AddDbContext<SiedliskoContext>();
             services.AddTransient<SiedliskoDataSeeder>();
             services.AddScoped<IRepository, Repository>();
             services.AddScoped<EmailRepository>();
+            services.AddSingleton<Reserver>();
+            // Add framework services.
             services.AddIdentity<SiedliskoUser, IdentityRole>(config =>
             {
                 config.Password.RequireUppercase = false;
@@ -82,6 +84,7 @@ namespace Siedlisko
             Mapper.Initialize(config =>
             {
                 config.CreateMap<SiedliskoUser, AccountDetailsViewModel>();
+                config.CreateMap<Reservation, CreateReservationViewModel>().ReverseMap();
             });
 
             loggerFactory.AddFile(string.Format("Logs/{0}_Siedlisko.log", DateTime.Now.ToString("dd-MM-yyyy")));
@@ -95,7 +98,6 @@ namespace Siedlisko
             {
                 app.UseExceptionHandler("/Home/Error");
             }
-
             app.UseStaticFiles();
 
             app.UseIdentity();

@@ -44,6 +44,7 @@
     <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.1" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Logs\" />
     <Folder Include="Properties\PublishProfiles\" />
     <Folder Include="Properties\PublishProfiles\" />
     <Folder Include="wwwroot\images\" />

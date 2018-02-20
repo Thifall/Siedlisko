@@ -2,6 +2,7 @@
 using Siedlisko.Models.Interfaces;
 using SiedliskoCommon.Models.Enums;
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Siedlisko.Models
 {
@@ -32,6 +33,13 @@ namespace Siedlisko.Models
                 return (byte)(Adults + Children);
             }
         }
+        public string StatusString
+        {
+            get
+            {
+                return NamingHelper.GetReservationStatusString(Status);
+            }
+        }
         #endregion
 
         #region Helpers
@@ -41,7 +49,7 @@ namespace Siedlisko.Models
         public string MonthString()
         {
             return NamingHelper.GetMonthString(StartDate.Month);
-        } 
+        }
         #endregion
     }
 }

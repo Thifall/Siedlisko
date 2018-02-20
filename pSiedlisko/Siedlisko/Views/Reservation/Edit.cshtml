@@ -25,7 +25,7 @@
             </div>
             <div class="form-group">
                 <label asp-for=Reservation.Status>Status zgłoszenia:</label>
-                <input asp-for=Reservation.Status type="date" class="form-control" readonly />
+                <input asp-for=Reservation.StatusString class="form-control" readonly />
             </div>
             @if (Model.Reservation.Status != SiedliskoCommon.Models.Enums.ReservationStatus.Confirmed)
             {
@@ -43,7 +43,7 @@
             </div>
             <div class="form-group">
                 <label asp-for=Reservation.NumberOfAccomodations>Ilość noclegów</label>
-                <input asp-for=Reservation.NumberOfAccomodations type="date" class="form-control" readonly />
+                <input asp-for=Reservation.NumberOfAccomodations type="text" class="form-control" readonly />
             </div>
             <div class="form-group">
                 <label asp-for=Reservation.PeopleQuantity>Ilość osób</label>

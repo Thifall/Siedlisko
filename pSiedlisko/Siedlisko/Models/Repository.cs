@@ -33,7 +33,7 @@ namespace Siedlisko.Models
 
         public IEnumerable<Reservation> GetAllReservations()
         {
-            return _context.Rezerwacje;
+            return _context.Rezerwacje.ToList();
         }
 
         public Reservation GetReservationById(int id)
@@ -105,6 +105,11 @@ namespace Siedlisko.Models
         public IEnumerable<EmailMessage> GetAllEmailToSend()
         {
             return _context.EmailMessages.Where(x => x.status == EmailStatus.ToSend);
+        }
+
+        public IEnumerable<Reservation> GetUsersReservations(string userName)
+        {
+            return GetAllReservations().Where(x => x.ReserverUserName == userName);
         }
         #endregion
     }

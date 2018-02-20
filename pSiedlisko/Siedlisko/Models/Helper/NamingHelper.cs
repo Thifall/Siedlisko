@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SiedliskoCommon.Models.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,6 +34,30 @@ namespace Siedlisko.Models.Helper
             }
             return MonthsNames[month];
         } 
+
+        public static string GetReservationStatusString(ReservationStatus status)
+        {
+            switch (status)
+            {
+                case ReservationStatus.Free:
+                case ReservationStatus.PartiallyTaken:
+                    return "Wolne miejsca";
+                case ReservationStatus.LastSpots:
+                    return "Ostatnie miejsca";
+                case ReservationStatus.Full:
+                    return "Brak miejsc";
+                case ReservationStatus.WaitingForConfirmation:
+                    return "Oczekuje na potwierdzenie";
+                case ReservationStatus.Confirmed:
+                    return "Potwierdzona";
+                case ReservationStatus.UnConfirmed:
+                    return "Niepotwierdzona";
+                case ReservationStatus.PreBooked:
+                    return "Wstępnie zarezerwowana";
+                default:
+                    return string.Empty;
+            }
+        }
         #endregion
     }
 }

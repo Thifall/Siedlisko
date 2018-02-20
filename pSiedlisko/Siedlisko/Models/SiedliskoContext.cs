@@ -33,6 +33,13 @@ namespace Siedlisko.Models
 
             optionsBuilder.UseSqlServer(_config["ConnectionStrings:SqlServerConnectionString"]);
         }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Room>().HasIndex(r => r.Name).IsUnique();
+            builder.Entity<Reservation>().Ignore(x => x.StatusString);
+            base.OnModelCreating(builder);
+        }
         #endregion
     }
 }

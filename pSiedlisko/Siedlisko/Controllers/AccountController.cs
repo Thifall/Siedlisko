@@ -65,11 +65,8 @@ namespace Siedlisko.Controllers
                             Redirect(returnUrl);
                         }
                     }
-                    else
-                    {
-                        ModelState.AddModelError("", "Incorect login details");
-                    }
                 }
+                ModelState.AddModelError("", "Incorect login details");
             }
             return View();
         }

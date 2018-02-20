@@ -11,6 +11,7 @@ namespace Siedlisko.Models.Interfaces
 
         #region Reservations
         IEnumerable<Reservation> GetAllReservations();
+        IEnumerable<Reservation> GetUsersReservations(string userName);
         IEnumerable<Reservation> GetRoomReservations(Room room);
         Reservation GetReservationById(int id);
         Task<bool> RemoveReservation(Reservation reservation);
