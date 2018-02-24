@@ -1,4 +1,5 @@
-﻿using SiedliskoCommon.Models;
+﻿using Siedlisko.Models.Interfaces;
+using SiedliskoCommon.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Siedlisko.Models
 {
-    public class EmailRepository
+    public class EmailRepository : IEmailRepository
     {
         #region Fields and properties
 

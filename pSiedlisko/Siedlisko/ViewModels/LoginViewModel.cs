@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Siedlisko.ViewModels.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Siedlisko.ViewModels
 {
-    public class LoginViewModel
+    public class LoginViewModel : IViewModel
     {
         [Required]
         [Display(Description = "E-mail", Name = "E-mail")]
@@ -17,5 +18,7 @@ namespace Siedlisko.ViewModels
         public string Password { get; set; }
 
         public bool Create { get; set; }
+        public bool OperationSucces { get; set; }
+        public string OperationResultsDescription { get; set; }
     }
 }

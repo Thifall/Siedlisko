@@ -43,13 +43,13 @@ namespace Siedlisko
                 config.ForwardClientCertificate = true;
                 config.ForwardWindowsAuthentication = false;
             });
-
+            //My Services
             services.AddSingleton(_config);
             services.AddTransient<PriceCounter>();
             services.AddDbContext<SiedliskoContext>();
             services.AddTransient<SiedliskoDataSeeder>();
             services.AddScoped<IRepository, Repository>();
-            services.AddScoped<EmailRepository>();
+            services.AddScoped<IEmailRepository, EmailRepository>();
             services.AddSingleton<Reserver>();
             // Add framework services.
             services.AddIdentity<SiedliskoUser, IdentityRole>(config =>

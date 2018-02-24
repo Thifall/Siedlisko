@@ -33,7 +33,7 @@ namespace MailSender.Mailing
             _configuration = configuration;
             _apiCredentials = Convert.ToBase64String(Encoding.UTF8.GetBytes(string.Format("{0}:{1}", _configuration["WebApi:Login"], _configuration["WebApi:Password"])));
             _baseAddress = _configuration["WebApi:BaseAdress"];
-            
+
         }
         #endregion
 
@@ -58,8 +58,14 @@ namespace MailSender.Mailing
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
-
             }
+
+            if (string.IsNullOrWhiteSpace(response))
+            {
+                Console.WriteLine("Revieved empty list");
+                return;
+            }
+
             Console.WriteLine("Processing emails...");
             var tempEmails = JsonConvert.DeserializeObject<List<EmailMessage>>(response);
             lock (_syncObject)
@@ -75,9 +81,13 @@ namespace MailSender.Mailing
                 if (emailsToSend.Count() > 0)
                 {
                     ProcessEmails(emailsToSend);
+                    Console.WriteLine("Processing emails done.");
+                }
+                else
+                {
+                    Console.WriteLine("Nothing to do...");
                 }
             }
-            Console.WriteLine("Processing emails done.");
         }
 
         public void Run()
@@ -120,7 +130,8 @@ namespace MailSender.Mailing
             //setting up smtp client
             try
             {
-                using (SmtpClient client = new SmtpClient()) {
+                using (SmtpClient client = new SmtpClient())
+                {
                     client.ServerCertificateValidationCallback = (s, a, b, c) => { return true; };
                     client.Connect(_configuration["SMPTConfiguration:Server"], int.Parse(_configuration["SMPTConfiguration:port"]), false);
                     //client.AuthenticationMechanisms.Remove("XOAUTH2");

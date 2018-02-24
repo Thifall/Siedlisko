@@ -5,6 +5,7 @@ using Siedlisko.Models;
 using Siedlisko.Models.Interfaces;
 using Siedlisko.ViewModels;
 using Siedlisko.ViewModels.Interfaces;
+using SiedliskoCommon.Models;
 using SiedliskoCommon.Models.Enums;
 using System;
 using System.Collections.Generic;
@@ -21,16 +22,21 @@ namespace Siedlisko.Reservations
         private readonly IRepository _repository;
         private readonly IConfigurationRoot _config;
         private static ILogger Logger;
+        private IEmailRepository _emailRepository;
 
         public string LastOperationResultsDescription { get; set; }
         public bool LastOperationResult { get; set; }
 
 
-        public Reserver(IRepository repository, IConfigurationRoot config, ILoggerFactory loggerFactory)
+        public Reserver(IRepository repository, IEmailRepository emailRepository, IConfigurationRoot config, ILoggerFactory loggerFactory)
         {
             _repository = repository;
             _config = config;
+            if (Logger == null)
+            {
             Logger = loggerFactory.CreateLogger(typeof(Reserver));
+            }
+            _emailRepository = emailRepository;
         }
 
         public async Task TryMakeReservation(CreateReservationViewModel createVM, SiedliskoUser user)
@@ -52,7 +58,7 @@ namespace Siedlisko.Reservations
             res.ReserverLastName = user.Nazwisko;
             res.ReserverUserName = user.UserName;
             res.Status = ReservationStatus.WaitingForConfirmation;
-            res.TotalCost = 1000;//CountTotalCost(res);
+            res.TotalCost = CountTotalCost(res);
 
             var addResult = await _repository.AddReservation(res, room);
 
@@ -60,8 +66,8 @@ namespace Siedlisko.Reservations
             if (addResult != null)
             {
                 SetupLastOperationResults("Rezerwacja przebiegła pomyślnie", true);
-                //PrepareEmail(user, res);
-                //PrepareEmailForAdministration(user, res);
+                PrepareEmail(user, res);
+                PrepareEmailForAdministration(user, res);
             }
             else
             {
@@ -85,14 +91,6 @@ namespace Siedlisko.Reservations
                 return;
             }
             SetupLastOperationResults("Rezerwacja nie istnieje...", false);
-        }
-
-        private void SetupLastOperationResults(string desc, bool success)
-        {
-            Monitor.Enter(_operationResultLocker);
-            Logger.LogInformation("[Reserver.SetupLastOperationResults()] Entering Operation lock!");
-            LastOperationResult = success;
-            LastOperationResultsDescription = desc;
         }
 
         public void RetriveLastOperationResults(IViewModel viewModel)
@@ -161,6 +159,83 @@ namespace Siedlisko.Reservations
                 return false;
             }
             return true;
+        }
+
+        private decimal CountTotalCost(Reservation res)
+        {
+            decimal dailyCost = 140;
+            if (res.Adults > 4)
+            {
+                dailyCost += (res.Adults - 4) * 10;
+            }
+
+            return (res.NumberOfAccomodations * dailyCost);
+        }
+
+        private void SetupLastOperationResults(string desc, bool success)
+        {
+            Monitor.Enter(_operationResultLocker);
+            Logger.LogInformation("[Reserver.SetupLastOperationResults()] Entering Operation lock!");
+            LastOperationResult = success;
+            LastOperationResultsDescription = desc;
+        }
+
+        private void PrepareEmailForAdministration(SiedliskoUser user, Reservation reservation)
+        {
+            try
+            {
+                EmailMessage email = new EmailMessage
+                {
+                    CreationTime = DateTime.Now,
+                    ReservationId = reservation.Id,
+                    ToAdress = _config["EmailNotificationsConfiguration:TargetNotificationEmail"],
+                    status = EmailStatus.ToSend,
+                    ToLogin = user.UserName
+                };
+                string format = System.IO.File.ReadAllText(_config["EmailNotificationsConfiguration:TemplateForAdminPath"]);
+                email.MessageBody = string.Format(format,
+                    reservation.StartDate.ToString("dd-MMMM-yyyy"),
+                    reservation.EndDate.ToString("dd-MMMM-yyyy"),
+                    reservation.NumberOfAccomodations,
+                    reservation.ReserverLastName,
+                    user.Email,
+                    user.PhoneNumber,
+                    reservation.Id);
+                _emailRepository.AddEmail(email);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError("[Reserver.PrepareEmailForAdministration()] Error occured while generating e-mail. ERROR: {0}", ex);
+            }
+        }
+
+        private void PrepareEmail(SiedliskoUser user, Reservation reservation)
+        {
+            try
+            {
+                EmailMessage email = new EmailMessage
+                {
+                    CreationTime = DateTime.Now,
+                    ReservationId = reservation.Id,
+                    ToAdress = user.Email,
+                    status = EmailStatus.ToSend,
+                    ToLogin = user.UserName
+                };
+                string format = System.IO.File.ReadAllText(_config["EmailNotificationsConfiguration:TemplateForUserPath"]);
+                email.MessageBody = string.Format(format,
+                    email.ToLogin,
+                    reservation.StartDate.ToString("dd-MMMM-yyyy"),
+                    reservation.EndDate.ToString("dd-MMMM-yyyy"),
+                    (reservation.Adults + reservation.Children),
+                    reservation.ReserverLastName,
+                    reservation.TotalCost,
+                    reservation.Id);
+                _emailRepository.AddEmail(email);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError("[Reserver.PrepareEmail()] Error occured while generating e-mail. ERROR: {0}", ex);
+            }
         }
     }
 }

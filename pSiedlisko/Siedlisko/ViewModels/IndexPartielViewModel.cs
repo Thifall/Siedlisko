@@ -1,5 +1,6 @@
 ﻿using Siedlisko.Models;
 using Siedlisko.Models.Interfaces;
+using Siedlisko.ViewModels.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Siedlisko.ViewModels
 {
-    public class IndexPartielViewModel
+    public class IndexPartielViewModel : IViewModel
     {
         private IRepository _repository;
 
@@ -25,5 +26,8 @@ namespace Siedlisko.ViewModels
                 return _repository.GetRoomIdOfReservation(Reservation);
             }
         }
+
+        public bool OperationSucces { get; set; }
+        public string OperationResultsDescription { get; set; }
     }
 }

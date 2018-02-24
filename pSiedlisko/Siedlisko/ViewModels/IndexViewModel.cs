@@ -1,6 +1,7 @@
 ﻿using Siedlisko.ExtensionMethods;
 using Siedlisko.Models;
 using Siedlisko.Models.Helper;
+using Siedlisko.ViewModels.Interfaces;
 using SiedliskoCommon.Models.Enums;
 using System;
 using System.Collections.Generic;
@@ -10,10 +11,13 @@ using System.Threading.Tasks;
 
 namespace Siedlisko.ViewModels
 {
-    public class IndexViewModel
+    public class IndexViewModel : IViewModel
     {
         #region Fields and Properties
         public DateTime Date { get; set; }
+        public bool OperationSucces { get; set; }
+        public string OperationResultsDescription { get; set; }
+
         private List<DayModel> Days = new List<DayModel>();
 
         #endregion

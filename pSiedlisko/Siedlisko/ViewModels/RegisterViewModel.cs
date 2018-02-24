@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Siedlisko.Models;
+using Siedlisko.ViewModels.Interfaces;
 
 namespace Siedlisko.ViewModels
 {
-    public class RegisterViewModel
+    public class RegisterViewModel : IViewModel
     {
         [Display(Name = "Nazwa użytkownika*")]
 		[Required(ErrorMessage = "Nazwa użytkownika jest wymagana")]
@@ -47,5 +48,7 @@ namespace Siedlisko.ViewModels
 
         public bool Succesed { get; set; }
         public string ErrorMsg { get; set; }
+        public bool OperationSucces { get; set; }
+        public string OperationResultsDescription { get; set; }
     }
 }

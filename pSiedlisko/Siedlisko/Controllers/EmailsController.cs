@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Siedlisko.Models;
+using Siedlisko.Models.Interfaces;
 using SiedliskoCommon.Models;
 using SiedliskoCommon.Models.Enums;
 using System;
@@ -19,11 +20,11 @@ namespace Siedlisko.Controllers
         private IConfigurationRoot _config;
         private SignInManager<SiedliskoUser> _signInManager;
         private UserManager<SiedliskoUser> _userManager;
-        private EmailRepository _repository;
+        private IEmailRepository _repository;
         #endregion
 
         #region ctor
-        public EmailsController(IConfigurationRoot config, SignInManager<SiedliskoUser> signInManager, UserManager<SiedliskoUser> userManager, EmailRepository repository)
+        public EmailsController(IConfigurationRoot config, SignInManager<SiedliskoUser> signInManager, UserManager<SiedliskoUser> userManager, IEmailRepository repository)
         {
             _config = config;
             _signInManager = signInManager;
@@ -53,16 +54,16 @@ namespace Siedlisko.Controllers
         [HttpPut("Api/UpdateEmail")]
         public async Task<IActionResult> UpdateEmail([FromBody]EmailMessage email)
         {
-            //string credentials = Request.Headers["Authorization"];
-            //if (string.IsNullOrWhiteSpace(credentials))
-            //{
-            //    return Unauthorized();
-            //}
+            string credentials = Request.Headers["Authorization"];
+            if (string.IsNullOrWhiteSpace(credentials))
+            {
+                return Unauthorized();
+            }
 
-            //if (!(await CheckCredentials(credentials)))
-            //{
-            //    return Unauthorized();
-            //}
+            if (!(await CheckCredentials(credentials)))
+            {
+                return Unauthorized();
+            }
             if (!ModelState.IsValid)
             {
                 return BadRequest();

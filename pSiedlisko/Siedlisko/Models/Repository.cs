@@ -63,6 +63,11 @@ namespace Siedlisko.Models
             action.Invoke(GetReservationById(Id));
             return (await _context.SaveChangesAsync() == 1);
         }
+
+        public IEnumerable<Reservation> GetUsersReservations(string userName)
+        {
+            return GetAllReservations().Where(x => x.ReserverUserName == userName);
+        }
         #endregion
 
         #region Rooms
@@ -99,18 +104,6 @@ namespace Siedlisko.Models
                 .ToList();
         }
 
-        #endregion
-
-        #region EmailMessages
-        public IEnumerable<EmailMessage> GetAllEmailToSend()
-        {
-            return _context.EmailMessages.Where(x => x.status == EmailStatus.ToSend);
-        }
-
-        public IEnumerable<Reservation> GetUsersReservations(string userName)
-        {
-            return GetAllReservations().Where(x => x.ReserverUserName == userName);
-        }
         #endregion
     }
 }

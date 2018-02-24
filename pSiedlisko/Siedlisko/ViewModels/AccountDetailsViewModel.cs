@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Siedlisko.ViewModels.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Siedlisko.ViewModels
 {
-    public class AccountDetailsViewModel
+    public class AccountDetailsViewModel : IViewModel
     {
         [Display(Name = "Nazwa użytkownika")]
         public string UserName { get; set; }
@@ -32,5 +33,8 @@ namespace Siedlisko.ViewModels
 
         public bool ChangesSaved { get; set; }
         public string ChangeNotification { get; set; }
+
+        public bool OperationSucces { get; set; }
+        public string OperationResultsDescription { get; set; }
     }
 }
