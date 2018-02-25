@@ -77,7 +77,7 @@ namespace MailSender.Mailing
                         _emails.Add(email);
                     }
                 }
-                var emailsToSend = _emails.Where(x => x.status == EmailStatus.ToSend);
+                var emailsToSend = _emails.Where(x => x.status == EmailStatus.ToSend).ToList();
                 if (emailsToSend.Count() > 0)
                 {
                     ProcessEmails(emailsToSend);
@@ -119,13 +119,15 @@ namespace MailSender.Mailing
             {
                 if (await UpdateEmailStatus(email))
                 {
-                    await SendEmail(email);
+                    if (!await SendEmail(email))
+                    {
+                        await UpdateEmailStatus(email, true);
+                    }
                 }
-
             }
         }
 
-        private async Task SendEmail(EmailMessage email)
+        private async Task<bool> SendEmail(EmailMessage email)
         {
             //setting up smtp client
             try
@@ -136,7 +138,6 @@ namespace MailSender.Mailing
                     client.Connect(_configuration["SMPTConfiguration:Server"], int.Parse(_configuration["SMPTConfiguration:port"]), false);
                     //client.AuthenticationMechanisms.Remove("XOAUTH2");
                     client.Authenticate(_configuration["SMPTConfiguration:Login"], _configuration["SMPTConfiguration:Password"]);
-
                     var message = new MimeMessage();
                     message.Body = new TextPart(TextFormat.Html) { Text = email.MessageBody };
                     message.To.Add(new MailboxAddress(email.ToAdress));
@@ -150,23 +151,27 @@ namespace MailSender.Mailing
             catch (ServiceNotConnectedException e)
             {
                 Console.WriteLine(e);
+                return false;
             }
             catch (ServiceNotAuthenticatedException e)
             {
                 Console.WriteLine(e);
+                return false;
             }
             catch (ObjectDisposedException e)
             {
                 Console.WriteLine(e);
+                return false;
             }
             catch (InvalidOperationException e)
             {
                 Console.WriteLine(e);
+                return false;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e);
-                throw;
+                return false;
             }
 
 
@@ -177,23 +182,32 @@ namespace MailSender.Mailing
                 _emails.Remove(email);
                 Console.WriteLine("Finished updating email status");
             }
+            return true;
         }
 
-        private async Task<bool> UpdateEmailStatus(EmailMessage email)
+        private async Task<bool> UpdateEmailStatus(EmailMessage email, bool resetStatus = false)
         {
-            switch (email.status)
+            if (resetStatus)
             {
-                case EmailStatus.ToSend:
-                    email.status = EmailStatus.Sending;
-                    break;
-                case EmailStatus.Sending:
-                    email.status = EmailStatus.Sent;
-                    break;
-                case EmailStatus.Sent:
-                    return false;
-                default:
-                    return false;
+                email.status = EmailStatus.ToSend;
             }
+            else
+            {
+                switch (email.status)
+                {
+                    case EmailStatus.ToSend:
+                        email.status = EmailStatus.Sending;
+                        break;
+                    case EmailStatus.Sending:
+                        email.status = EmailStatus.Sent;
+                        break;
+                    case EmailStatus.Sent:
+                        return false;
+                    default:
+                        return false;
+                }
+            }
+
             using (var client = new HttpClient())
             {
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", _apiCredentials);

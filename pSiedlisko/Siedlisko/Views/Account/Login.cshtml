@@ -14,6 +14,13 @@
         <span>Konto zostało założone</span>
     </div>
 }
+
+@if (Model != null && Model.OperationSucces == false && !string.IsNullOrWhiteSpace(Model.OperationResultsDescription))
+{
+    <div class="alert alert-danger text-center row">
+        @Model.OperationResultsDescription
+    </div>
+}
 <div class="col-md-offset-4 col-md-4">
     <form class="form-horizontal" method="post" novalidate>
         <div asp-validation-summary="ModelOnly" class="form-control-static"></div>

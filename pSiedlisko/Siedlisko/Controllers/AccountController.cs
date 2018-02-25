@@ -66,9 +66,12 @@ namespace Siedlisko.Controllers
                         }
                     }
                 }
-                ModelState.AddModelError("", "Incorect login details");
             }
-            return View();
+            loginViewModel.Password = "";
+            loginViewModel.OperationResultsDescription = "Nieprawidłowe dane logowania";
+            loginViewModel.OperationSucces = false;
+            //ModelState.AddModelError("", "Incorect login details");
+            return View(loginViewModel);
         }
 
         public IActionResult Register()

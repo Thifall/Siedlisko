@@ -2,6 +2,7 @@
 using Siedlisko.Models.Interfaces;
 using SiedliskoCommon.Models.Enums;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Siedlisko.Models
@@ -9,6 +10,7 @@ namespace Siedlisko.Models
     public class Reservation : IReservation
     {
         #region Fields and Properties
+        [Key]
         public int Id { get; set; }
         public string ReserverLastName { get; set; }
         public string ReserverUserName { get; set; }

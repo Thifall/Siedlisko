@@ -107,6 +107,18 @@ div.WaitingForConfirmation {
     margin-top: 20px;
 }
 
+.legenda {
+    margin-top:20px;
+}
+
+.legendaSquare {
+    float: left;
+    width: 10px;
+    height: 10px;
+    margin: 5px;
+    border: 1px solid rgba(0, 0, 0, .2);
+}
+
 /**{
     border: 1px solid black;
 }*/

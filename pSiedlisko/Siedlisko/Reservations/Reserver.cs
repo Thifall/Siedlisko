@@ -44,6 +44,13 @@ namespace Siedlisko.Reservations
             var room = _repository.GetRoom(createVM.RoomId);
             var res = Mapper.Map<Reservation>(createVM);
 
+            if (createVM.Adults + createVM.Children > 7)
+            {
+                LastOperationResultsDescription = "W domku może nocować maksymalnie 6 osób dorosłych lub 7 osób wliczając dzieci poniżej 10 roku życia";
+                LastOperationResult = false;
+                return;
+            }
+
             //1. Check if can be reserved
 
             if (room == null || !CheckIfReservationCanBeMade(room, res))

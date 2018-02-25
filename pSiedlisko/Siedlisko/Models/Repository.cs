@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Siedlisko.Models.Interfaces;
 using SiedliskoCommon.Models;
 using SiedliskoCommon.Models.Enums;
@@ -43,7 +44,9 @@ namespace Siedlisko.Models
 
         public async Task<bool> RemoveReservation(Reservation reservation)
         {
-            var removedRes = _context.Rezerwacje.Remove(reservation);
+            var reservationToRemove = _context.Rezerwacje.FirstOrDefault(r => r.Id == reservation.Id);
+            var removedRes = _context.Rezerwacje.Remove(reservationToRemove);
+
             bool success;
             if (removedRes.State == Microsoft.EntityFrameworkCore.EntityState.Deleted)
             {
