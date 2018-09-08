@@ -103,7 +103,7 @@ namespace Siedlisko.Controllers
                 var setPasswordResult = await _userManager.AddPasswordAsync(userToRegister, registerViewModel.Password);
                 if (setPasswordResult.Succeeded)
                 {
-                    userToRegister.Roles.Add(new IdentityUserRole<string>() { RoleId = "User" });
+                    //userToRegister.Roles.Add(new IdentityUserRole<string>() { RoleId = "User" });
                     await _userManager.UpdateAsync(userToRegister);
                     return RedirectToAction("Login", "Account", new { created = true });
                 }

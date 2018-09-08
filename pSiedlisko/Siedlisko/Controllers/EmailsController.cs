@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Serilog;
 using Siedlisko.Models;
 using Siedlisko.Models.Interfaces;
 using SiedliskoCommon.Models;
@@ -79,6 +80,7 @@ namespace Siedlisko.Controllers
             }
             catch (Exception ex)
             {
+                Log.Debug(ex, "bubel");
                 return BadRequest("Error occured during action. Operation was unsuccessfull");
             }
             return BadRequest();

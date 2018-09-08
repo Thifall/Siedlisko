@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Siedlisko.Models.Interfaces;
 using SiedliskoCommon.Models;
 
 namespace Siedlisko.Models

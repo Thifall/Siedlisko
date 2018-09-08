@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Serilog;
 using SiedliskoCommon.Models.Enums;
 using System;
 using System.Collections.Generic;
@@ -14,14 +15,16 @@ namespace Siedlisko.Models.Helper
         #region Fields and Properties
         private SiedliskoContext _context;
         private UserManager<SiedliskoUser> _userManager;
+        private RoleManager<IdentityRole> _roleManager;
         private IConfigurationRoot _config;
         #endregion
 
         #region .ctor
-        public SiedliskoDataSeeder(SiedliskoContext dbContext, UserManager<SiedliskoUser> userManager, IConfigurationRoot config)
+        public SiedliskoDataSeeder(SiedliskoContext dbContext, UserManager<SiedliskoUser> userManager, RoleManager<IdentityRole> roleManager, IConfigurationRoot config)
         {
             _context = dbContext;
             _userManager = userManager;
+            _roleManager = roleManager;
             _config = config;
         }
         #endregion
@@ -29,6 +32,9 @@ namespace Siedlisko.Models.Helper
         #region Public API
         public async Task SeedData()
         {
+            await _roleManager.CreateAsync(new IdentityRole() { Name = "DEV", NormalizedName = "DEV" });
+            await _roleManager.CreateAsync(new IdentityRole() { Name = "Admin", NormalizedName = "Admin" });
+            await _roleManager.CreateAsync(new IdentityRole() { Name = "User", NormalizedName = "User" });
 
             if (await _userManager.FindByEmailAsync("migosh@o2.pl") == null)
             {
@@ -39,9 +45,16 @@ namespace Siedlisko.Models.Helper
                     Email = _config["DevUserDetails:DevEmail"],
                     UserName = "jmusiol",
                 };
-                user.Roles.Add(new IdentityUserRole<string>() { RoleId = _config["DevUserDetails:DevRoleId"] });
-
                 var devUserCreationResults = await _userManager.CreateAsync(user, _config["DevUserDetails:DevPassword"]);
+
+                if (devUserCreationResults.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(user, _config["DevUserDetails:DevRoleId"]);
+                }
+                else
+                {
+                    Log.Warning("Could not create default user");
+                }
             }
 
             if (!_context.Pokoje.Any() && !_context.Prices.Any() && !_context.Rezerwacje.Any())

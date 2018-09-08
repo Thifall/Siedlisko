@@ -3,18 +3,17 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Serilog.Extensions;
 using Siedlisko.Models;
 using Siedlisko.Models.Helper;
 using Siedlisko.Models.Interfaces;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using AutoMapper;
-using Siedlisko.ViewModels;
 using System;
 using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Threading.Tasks;
 using Siedlisko.Reservations;
+using Microsoft.AspNetCore.Identity;
+using AutoMapper;
+using Siedlisko.ViewModels;
 
 namespace Siedlisko
 {
@@ -41,7 +40,7 @@ namespace Siedlisko
             {
                 config.AutomaticAuthentication = false;
                 config.ForwardClientCertificate = true;
-                config.ForwardWindowsAuthentication = false;
+                //config.ForwardWindowsAuthentication = false;
             });
             //My Services
             services.AddSingleton(_config);
@@ -50,7 +49,7 @@ namespace Siedlisko
             services.AddTransient<SiedliskoDataSeeder>();
             services.AddScoped<IRepository, Repository>();
             services.AddScoped<IEmailRepository, EmailRepository>();
-            services.AddSingleton<Reserver>();
+            services.AddScoped<Reserver>();
             // Add framework services.
             services.AddIdentity<SiedliskoUser, IdentityRole>(config =>
             {
@@ -58,8 +57,12 @@ namespace Siedlisko
                 config.User.RequireUniqueEmail = true;
                 config.Password.RequiredLength = 8;
                 config.Password.RequireNonAlphanumeric = false;
-                config.Cookies.ApplicationCookie.LoginPath = "/Account/Login";
-                config.Cookies.ApplicationCookie.Events = new CookieAuthenticationEvents()
+               
+            }).AddEntityFrameworkStores<SiedliskoContext>();
+            services.ConfigureApplicationCookie(config =>
+            {
+                config.LoginPath = "/Account/Login";
+                config.Events = new CookieAuthenticationEvents()
                 {
                     OnRedirectToLogin = async ctx =>
                     {
@@ -74,7 +77,7 @@ namespace Siedlisko
                         await Task.Yield();
                     }
                 };
-            }).AddEntityFrameworkStores<SiedliskoContext>();
+            });
             services.AddMvc().AddJsonOptions(config => config.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver());
         }
 
@@ -100,7 +103,7 @@ namespace Siedlisko
             }
             app.UseStaticFiles();
 
-            app.UseIdentity();
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
