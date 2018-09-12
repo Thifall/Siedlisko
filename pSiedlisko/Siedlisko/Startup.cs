@@ -61,6 +61,7 @@ namespace Siedlisko
             }).AddEntityFrameworkStores<SiedliskoContext>();
             services.ConfigureApplicationCookie(config =>
             {
+                config.CookieSecure = Microsoft.AspNetCore.Http.CookieSecurePolicy.SameAsRequest;
                 config.LoginPath = "/Account/Login";
                 config.Events = new CookieAuthenticationEvents()
                 {
